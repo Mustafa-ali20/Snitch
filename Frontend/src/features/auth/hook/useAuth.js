@@ -45,8 +45,8 @@ export function useAuth() {
       dispatch(setLoading(true));
       const data = await getMe();
       dispatch(setUser(data.user));
+    // eslint-disable-next-line
     } catch (error) {
-      // silently ignore - user just isn't logged in
       dispatch(setUser(null));
     } finally {
       dispatch(setLoading(false));
