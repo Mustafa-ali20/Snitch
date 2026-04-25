@@ -1,8 +1,18 @@
-import userModel from "../models/user.model";
+import userModel from "../models/user.model.js";
 import asyncHandler from "express-async-handler";
 import { config } from "../config/config.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+
+async function sendTokenResponse(user, res, message) {
+  const token = jwt.sign(
+    {
+      id: user._id,
+    },
+    config.JWT_SECRET,
+    { expiresIn: "7d" },
+  );
+}
 
 export const register = asyncHandler(async (req, res) => {
   const { fullname, email, password, contact, isSeller } = req.body;
@@ -64,14 +74,7 @@ export const login = asyncHandler(async (req, res) => {
     throw new Error("Invalid credentials");
   }
 
-  const token = jwt.sign(
-    {
-      id: user._id,
-      username: user.username,
-    },
-    process.env.JWT_SECRET,
-    { expiresIn: "7d" },
-  );
+  await sendTokenResponse(user, res, "user logged in sucessfully");
 
   res.cookie("token", token, {
     httpOnly: true,
@@ -97,4 +100,40 @@ export const getMe = asyncHandler(async (req, res) => {
     success: true,
     user: req.user,
   });
+});
+
+export const googleCallback = asyncHandler(async (req, res) => {
+  const { id, displayName, emails, photos } = req.user;
+  const email = emails[0].value;
+  const profilePic = photos[0].value;
+
+  const user = await userModel.findOne({
+    email,
+  });
+
+  if (!user) {
+    user = await userModel.create({
+      fullname,
+      email,
+      goodleId,
+    });
+  }
+
+  const token = jwt.sign(
+    {
+      id: user._id,
+    },
+    config.JWT_SECRET,
+    { expiresIn: " 7d" },
+  );
+
+  res.cookie("token", token, {
+    httpOnly: true,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  });
+
+  
+  res.redirect("http://localhost:5173/dashboard");
 });

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const authApiInstance = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "/api/auth",
   withCredentials: true,
 });
 
@@ -12,7 +12,7 @@ export async function register({
   contact,
   isSeller
 }) {
-  const response = await authApiInstance.post("/api/auth/register", {
+  const response = await authApiInstance.post("/register", {
     fullname,
     email,
     password,
@@ -23,7 +23,7 @@ export async function register({
 }
 
 export async function login({ identifier, password }) {
-  const response = await authApiInstance.post("/api/auth/login", {
+  const response = await authApiInstance.post("/login", {
     identifier,
     password,
   });
@@ -31,11 +31,11 @@ export async function login({ identifier, password }) {
 }
 
 export async function getMe() {
-  const response = await authApiInstance.get("api/auth/get-me");
+  const response = await authApiInstance.get("/get-me");
   return response.data;
 }
 
 export async function logout() {
-  const response = await authApiInstance.post("/api/auth/logout");
+  const response = await authApiInstance.post("/logout");
   return response.data;
 }
