@@ -4,9 +4,10 @@ import morgan from "morgan";
 import cors from "cors";
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import errorHandler from "../middlewares/error.middleware.js";
-import authRouter from "../routes/auth.routes.js";
-import { config } from "../config/config.js";
+import errorHandler from "./middlewares/error.middleware.js";
+import authRouter from "./routes/auth.routes.js";
+import { config } from "./config/config.js";
+import productRoute from "./routes/product.routes.js";
 
 const app = express();
 
@@ -41,6 +42,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", authRouter);
+app.use("/api/product", productRoute);
 
 app.use(errorHandler);
 

@@ -12,6 +12,15 @@ async function sendTokenResponse(user, res, message) {
     config.JWT_SECRET,
     { expiresIn: "7d" },
   );
+
+  res.cookie("token", token, {
+    httpOnly: true,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  });
+
+  return token;
 }
 
 export const register = asyncHandler(async (req, res) => {
@@ -56,6 +65,8 @@ export const register = asyncHandler(async (req, res) => {
   });
 });
 
+const isEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
 export const login = asyncHandler(async (req, res) => {
   const { identifier, password } = req.body;
 
@@ -75,13 +86,6 @@ export const login = asyncHandler(async (req, res) => {
   }
 
   await sendTokenResponse(user, res, "user logged in sucessfully");
-
-  res.cookie("token", token, {
-    httpOnly: true,
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-  });
 
   res.status(200).json({
     success: true,
@@ -134,6 +138,5 @@ export const googleCallback = asyncHandler(async (req, res) => {
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   });
 
-  
   res.redirect("http://localhost:5173/dashboard");
 });

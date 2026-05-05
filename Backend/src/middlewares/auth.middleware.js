@@ -19,6 +19,11 @@ const authMiddleware = asyncHandler(async (req, res, next) => {
     throw new Error("Not authorized, user not found");
   }
 
+  if (user.role !== "seller") {
+    res.status(403);
+    throw new Error("Forbidden");
+  }
+
   req.user = user;
   next();
 });
