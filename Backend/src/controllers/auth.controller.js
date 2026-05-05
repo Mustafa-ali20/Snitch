@@ -40,18 +40,7 @@ export const register = asyncHandler(async (req, res) => {
     role: isSeller ? "seller" : "buyer",
   });
 
-  const token = jwt.sign(
-    {
-      id: user._id,
-      username: user.username,
-    },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: "3d",
-    },
-  );
-
-  res.cookie("token", token);
+  await sendTokenResponse(user, res, "Registration successful");
 
   res.status(201).json({
     message:
