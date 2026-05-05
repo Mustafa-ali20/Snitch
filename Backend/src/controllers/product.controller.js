@@ -3,24 +3,26 @@ import productModel from "../models/product.model.js";
 import { uploadFile } from "../services/storage.service.js";
 
 export const createProduct = asyncHandler(async (req, res) => {
-  const { title, description, price } = req.body;
-  const seller = req.body;
+  const { title, description, price, priceAmount, priceCurrency } = req.body;
+  const seller = req.user;
 
   const images = await Promise.all(
     req.files.map(async (file) => {
-      return await uploadFile({
+      const result = await uploadFile({
         buffer: file.buffer,
-        fileName: file.originalName,
+        fileName: file.originalname,
       });
+      console.log(result); // check terminal to confirm field name
+      return { url: result.url }; // ✅ single return
     }),
   );
 
-  const product = productModel.create({
+  const product = await productModel.create({
     title,
     description,
     price: {
-      amount: price,
-      currency: "KWD",
+      amount: priceAmount,
+      currency: priceCurrency || "KWD",
     },
     images,
     seller: seller._id,

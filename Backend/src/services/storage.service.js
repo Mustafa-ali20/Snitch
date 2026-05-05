@@ -2,7 +2,7 @@ import ImageKit from "@imagekit/nodejs";
 import { config } from "../config/config.js";
 
 const client = new ImageKit({
-  privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
+  privateKey: config.IMAGEKIT_PRIVATE_KEY,
 });
 
 export async function uploadFile({ buffer, fileName, folder = "snitch" }) {

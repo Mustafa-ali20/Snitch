@@ -13,7 +13,7 @@ const upload = multer({
 const productRoute = Router();
 
 productRoute.post(
-  "/product",
+  "/",
   authMiddleware,
   upload.array("images", 7),
   createProduct,

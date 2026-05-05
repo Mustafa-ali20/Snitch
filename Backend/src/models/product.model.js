@@ -22,20 +22,18 @@ const productSchema = new Schema(
       },
       currency: {
         type: String,
-        enum: ["USD", "EUR", "INR"],
+        enum: ["USD", "EUR", "INR", "KWD"],
         default: "KWD",
       },
     },
-    images: {
-      url: {
-        type: String,
-        required: true,
+    images: [
+      {
+        url: {
+          type: String,
+          required: true,
+        },
       },
-      //   alt: {
-      //     type: String,
-      //     required: true,
-      //   },
-    },
+    ],
   },
   { timestamps: true },
 );
