@@ -1,7 +1,11 @@
 import express, { Router } from "express";
 import authMiddleware from "../middlewares/auth.middleware.js";
 import multer from "multer";
-import { createProduct } from "../controllers/product.controller.js";
+import {
+  createProduct,
+  getSellerProducts,
+} from "../controllers/product.controller.js";
+import { get } from "mongoose";
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -18,5 +22,13 @@ productRoute.post(
   upload.array("images", 7),
   createProduct,
 );
+
+/**
+ * @route POST /api/products/seller
+ * @description Get all products of the authenticated seller
+ * @access Private (Seller only)
+ */
+
+productRoute.get("/seller", authMiddleware, getSellerProducts);
 
 export default productRoute;

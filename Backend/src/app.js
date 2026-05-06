@@ -42,7 +42,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", authRouter);
-app.use("/api/product", productRoute);
+app.use("/api/products", productRoute);
 
 app.use(errorHandler);
 
