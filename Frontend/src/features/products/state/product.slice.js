@@ -3,13 +3,13 @@ import { createSlice } from "@reduxjs/toolkit";
 const productSlice = createSlice({
   name: "product",
   initialState: {
-    sellerProducts: [],
+    products: [],        // renamed from sellerProducts
     loading: false,
     error: null,
   },
   reducers: {
-    setSellerProducts: (state, action) => {
-      state.sellerProducts = action.payload;
+    setProducts: (state, action) => {        // renamed
+      state.products = action.payload;
     },
     setLoading: (state, action) => {
       state.loading = action.payload;

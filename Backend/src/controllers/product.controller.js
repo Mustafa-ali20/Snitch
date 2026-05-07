@@ -3,8 +3,7 @@ import productModel from "../models/product.model.js";
 import { uploadFile } from "../services/storage.service.js";
 
 export const createProduct = asyncHandler(async (req, res) => {
-  const { title, description, price, priceAmount, priceCurrency } = req.body;
-  const seller = req.user;
+  const { title, description, priceAmount, priceCurrency, category } = req.body;
 
   const images = await Promise.all(
     req.files.map(async (file) => {
@@ -12,8 +11,7 @@ export const createProduct = asyncHandler(async (req, res) => {
         buffer: file.buffer,
         fileName: file.originalname,
       });
-      console.log(result); // check terminal to confirm field name
-      return { url: result.url }; // ✅ single return
+      return { url: result.url };
     }),
   );
 
@@ -25,20 +23,19 @@ export const createProduct = asyncHandler(async (req, res) => {
       currency: priceCurrency || "KWD",
     },
     images,
-    seller: seller._id,
+    createdBy: req.user._id,
+    category: req.user._id,
   });
 
   res.status(201).json({
-    message: "product created successfully",
+    message: "Product created successfully",
     success: true,
     product,
   });
 });
 
-export const getSellerProducts = asyncHandler(async (req, res) => {
-  const seller = req.user;
-
-  const products = await productModel.find({ seller: seller._id });
+export const getAllProducts = asyncHandler(async (req, res) => {
+  const products = await productModel.find({});
 
   res.status(200).json({
     message: "Products fetched successfully",
@@ -46,4 +43,3 @@ export const getSellerProducts = asyncHandler(async (req, res) => {
     products,
   });
 });
-

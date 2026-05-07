@@ -1,9 +1,5 @@
-import { getSellerProducts, createProduct } from "../services/product.api";
-import {
-  setError,
-  setSellerProducts,
-  setLoading,
-} from "../state/product.slice";
+import { getAllProducts, createProduct } from "../services/product.api";
+import { setError, setProducts, setLoading } from "../state/product.slice";
 import { useDispatch } from "react-redux";
 
 export function useProduct() {
@@ -13,7 +9,7 @@ export function useProduct() {
     try {
       dispatch(setLoading(true));
       const data = await createProduct(formData);
-      await handleGetSellerProduct();
+      await handleGetAllProducts();
       return data.product;
     } catch (error) {
       dispatch(
@@ -24,21 +20,19 @@ export function useProduct() {
     }
   }
 
-  async function handleGetSellerProduct() {
+  async function handleGetAllProducts() {
     try {
       dispatch(setLoading(true));
-      const data = await getSellerProducts();
-      dispatch(setSellerProducts(data.products));
+      const data = await getAllProducts();
+      dispatch(setProducts(data.products));
     } catch (error) {
       dispatch(
-        setError(
-          error.response?.data?.message || "Failed to fetch seller products",
-        ),
+        setError(error.response?.data?.message || "Failed to fetch products"),
       );
     } finally {
       dispatch(setLoading(false));
     }
   }
 
-  return { handleCreateProduct, handleGetSellerProduct };
+  return { handleCreateProduct, handleGetAllProducts }; 
 }

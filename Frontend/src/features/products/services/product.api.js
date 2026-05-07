@@ -8,9 +8,7 @@ const productApi = axios.create({
 export async function createProduct(formData) {
   try {
     const response = await productApi.post("/", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+      headers: { "Content-Type": "multipart/form-data" },
     });
     return response.data;
   } catch (error) {
@@ -19,12 +17,12 @@ export async function createProduct(formData) {
   }
 }
 
-export async function getSellerProducts() {
+export async function getAllProducts() {
   try {
-    const response = await productApi.get("/seller");
+    const response = await productApi.get("/");
     return response.data;
   } catch (error) {
-    console.error("Error fetching seller products:", error);
+    console.error("Error fetching products:", error);
     throw error;
   }
 }

@@ -24,7 +24,13 @@ authRouter.get(
 );
 authRouter.get(
   "/google/callback",
-  passport.authenticate("google", { session: false, failureRedirect: config.NODE_ENV == 'developement' ? "http://localhost:5173/dashboard" : "/" }),
+  passport.authenticate("google", {
+    session: false,
+    failureRedirect:
+      config.NODE_ENV == "developement"
+        ? "http://localhost:5173/dashboard"
+        : "/",
+  }),
   googleCallback,
 );
 
