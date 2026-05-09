@@ -1,1 +1,16 @@
 @import "tailwindcss";
+
+@font-face {
+  font-family: Neue;
+  src: url(/fonts/NeueHaas.ttf);
+}
+
+@font-face {
+  font-family: Neue-medium;
+  src: url(/fonts/NeueHaas_Medium.ttf);
+}
+
+@font-face {
+  font-family: Neue-bold;
+  src: url(/fonts/NeueHaas_Bold.ttf);
+}
