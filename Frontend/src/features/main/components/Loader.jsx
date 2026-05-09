@@ -81,10 +81,10 @@ export default function Loader({ onDone }) {
           </div>
 
           {/* Counter */}
-          <div className="absolute flex flex-col items-end gap-1 z-10 select-none -right-40 top-25 -translate-y-1/2 overflow-hidden">
+          <div className="absolute flex flex-col items-end gap-1 z-10 select-none -right-20 top-35 md:-right-30 md:top-50 lg:-right-40 lg:top-25 -translate-y-1/2 overflow-hidden">
             <span
               ref={counterRef}
-              className="font-['Neue'] tabular-nums text-[clamp(13px,1.6vw,25px)] text-[#FF0101] "
+              className="font-['Neue'] tabular-nums text-[clamp(20px,1.6vw,25px)] text-[#FF0101] "
             ></span>
           </div>
         </div>

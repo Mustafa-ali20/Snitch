@@ -116,9 +116,12 @@ export function useLoaderAnimation({ onComplete, active }) {
         curtainRef.current,
         {
           yPercent: -100,
-          duration: 1,
+          duration: 1.5,
           ease: "power3.inOut",
-          onComplete,
+          onComplete: () => {
+            loader.style.display = "none";
+            onComplete?.();
+          },
         },
         "-=0.3",
       );
