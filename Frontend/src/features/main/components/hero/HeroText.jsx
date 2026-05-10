@@ -7,7 +7,7 @@ export default function HeroText() {
 
   return (
     <div className="flex flex-col w-screen">
-      <div className="flex w-screen overflow-hidden px-3 lg:px-0">
+      <div className="flex w-screen overflow-hidden px-3 lg:px-5">
         {LETTERS.map((char, i) => (
           <span key={i} className="overflow-hidden inline-flex">
             <span
@@ -20,7 +20,7 @@ export default function HeroText() {
         ))}
       </div>
 
-      <div className="px-4 lg:px-10">
+      <div className="px-4 md:px-6 lg:px-10">
         <div
           ref={underlineRef}
           className="w-full h-1 md:h-1.5 bg-[#ede8e2] origin-left will-change-transform mt-1.5 md:mt-4 "

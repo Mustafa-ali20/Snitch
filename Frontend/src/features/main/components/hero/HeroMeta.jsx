@@ -5,14 +5,13 @@ export default function HeroMeta() {
   const {
     brandRef,
     whyLabelRef,
-    whyTextRef,
     visitRef,
     shippingRef,
     copyrightRef,
   } = useHeroMetaAnimation();
 
   return (
-    <div className="w-full px-4 lg:px-10 py-8 text-[#ede8e2] font-['Neue']">
+    <div className="w-full px-4 md:px-6 lg:px-10 py-8 text-[#ede8e2] font-['Neue']">
       {/* Large screen: single row — small/medium: wraps to grid */}
       <div className="grid grid-cols-2 md:grid-cols-[1fr_2fr_1fr_1fr] gap-y-8 gap-x-4">
         {/* Brand */}
