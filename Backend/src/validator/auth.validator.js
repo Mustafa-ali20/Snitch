@@ -52,8 +52,6 @@ export const registerValidator = [
     .matches(/^\d{8}$/)
     .withMessage("Contact must be 8-digit number"),
 
-  body("isSeller").isBoolean().withMessage("isSeller must be a boolean value"),
-
   validate,
 ];
 

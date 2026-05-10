@@ -29,7 +29,7 @@ passport.use(
     {
       clientID: config.GOOGLE_CLIENT_ID,
       clientSecret: config.GOOGLE_CLIENT_SECRET,
-      callbackURL: "/api/auth/google/callback",
+      callbackURL: "http://localhost:3000/api/auth/google/callback",
     },
     (_, __, profile, done) => {
       return done(null, profile);

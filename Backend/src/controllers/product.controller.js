@@ -35,7 +35,7 @@ export const createProduct = asyncHandler(async (req, res) => {
 });
 
 export const getAllProducts = asyncHandler(async (req, res) => {
-  const products = await productModel.find({});
+  const products = await productModel.find();
 
   res.status(200).json({
     message: "Products fetched successfully",

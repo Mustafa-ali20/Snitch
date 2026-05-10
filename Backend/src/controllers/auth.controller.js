@@ -24,7 +24,7 @@ async function sendTokenResponse(user, res, message) {
 }
 
 export const register = asyncHandler(async (req, res) => {
-  const { fullname, email, password, contact, isSeller } = req.body;
+  const { fullname, email, password, contact } = req.body;
 
   const userExists = await userModel.findOne({ $or: [{ email }, { contact }] });
   if (userExists) {
@@ -37,7 +37,7 @@ export const register = asyncHandler(async (req, res) => {
     email,
     password,
     contact,
-    role: isSeller ? "seller" : "buyer",
+    role: "buyer",
   });
 
   await sendTokenResponse(user, res, "Registration successful");
@@ -48,8 +48,9 @@ export const register = asyncHandler(async (req, res) => {
     success: true,
     user: {
       id: user._id,
-      username: user.username,
+      fullname: user.fullname,
       email: user.email,
+      role: user.role,
     },
   });
 });
@@ -81,8 +82,9 @@ export const login = asyncHandler(async (req, res) => {
     message: "Login sucessfull",
     user: {
       _id: user._id,
-      username: user.username,
+      fullname: user.fullname,
       email: user.email,
+      role: user.role,
     },
   });
 });
@@ -96,29 +98,24 @@ export const getMe = asyncHandler(async (req, res) => {
 });
 
 export const googleCallback = asyncHandler(async (req, res) => {
-  const { id, displayName, emails, photos } = req.user;
+  const { displayName, emails, photos } = req.user;
   const email = emails[0].value;
   const profilePic = photos[0].value;
 
-  const user = await userModel.findOne({
-    email,
-  });
+  let user = await userModel.findOne({ email }); // let not const
 
   if (!user) {
     user = await userModel.create({
-      fullname,
+      fullname: displayName,
       email,
-      goodleId,
+      googleId: req.user.id,
+      profilePic,
     });
   }
 
-  const token = jwt.sign(
-    {
-      id: user._id,
-    },
-    config.JWT_SECRET,
-    { expiresIn: " 7d" },
-  );
+  const token = jwt.sign({ id: user._id }, config.JWT_SECRET, {
+    expiresIn: "7d",
+  });
 
   res.cookie("token", token, {
     httpOnly: true,
@@ -127,5 +124,14 @@ export const googleCallback = asyncHandler(async (req, res) => {
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   });
 
-  res.redirect("http://localhost:5173/dashboard");
+  res.redirect("http://localhost:5173/");
+});
+
+export const logout = asyncHandler(async (req, res) => {
+  res.clearCookie("token");
+
+  res.status(200).json({
+    success: true,
+    message: "Logged out successfully",
+  });
 });

@@ -32,3 +32,4 @@ export const adminOnly = asyncHandler(async (req, res, next) => {
     throw new Error("Not authorized, admin only");
   }
 });
+

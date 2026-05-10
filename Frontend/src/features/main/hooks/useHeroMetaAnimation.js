@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { loaderState } from "../utils/loaderState";
 
 export function useHeroMetaAnimation() {
   const brandRef = useRef(null);
@@ -24,7 +25,7 @@ export function useHeroMetaAnimation() {
 
       gsap.set(singleEls, { y: "110%" });
 
-      const tl = gsap.timeline({ delay: 5.1 });
+      const tl = gsap.timeline({ delay: loaderState.didPlay ? 5.1 : 0 });
 
       tl.to(
         brandRef.current,

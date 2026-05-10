@@ -1,11 +1,10 @@
 import { setError, setUser, setLoading } from "../state/auth.slice";
-import { getMe, login, register } from "../service/auth.api";
+import { getMe, login, register, logout } from "../service/auth.api";
 import { useDispatch } from "react-redux";
 
 export function useAuth() {
   const dispatch = useDispatch();
 
-  // single wrapper — handles loading, error, finally for every function from claude better handling of loading and error states in one place, instead of repeating in every function
   async function withDispatch(asyncFn, fallbackMessage) {
     try {
       dispatch(setLoading(true));
@@ -18,17 +17,11 @@ export function useAuth() {
     }
   }
 
-  async function handleRegister({
-    fullname,
-    email,
-    password,
-    contact,
-    isSeller = false,
-  }) {
+  async function handleRegister({ fullname, email, password, contact }) {
     return await withDispatch(async () => {
-      const user = await register({ fullname, email, password, contact, isSeller });
-      dispatch(setUser(user));
-      return true;
+      const data = await register({ fullname, email, password, contact });
+      dispatch(setUser(data.user));
+      return data.user;
     }, "Registration failed");
   }
 
@@ -36,7 +29,7 @@ export function useAuth() {
     return await withDispatch(async () => {
       const data = await login({ identifier, password });
       dispatch(setUser(data.user));
-      return true;
+      return data.user;
     }, "Login failed");
   }
 
@@ -45,7 +38,7 @@ export function useAuth() {
       dispatch(setLoading(true));
       const data = await getMe();
       dispatch(setUser(data.user));
-    // eslint-disable-next-line
+      // eslint-disable-next-line
     } catch (error) {
       dispatch(setUser(null));
     } finally {
@@ -53,5 +46,10 @@ export function useAuth() {
     }
   }
 
-  return { handleGetMe, handleLogin, handleRegister };
+  async function handleLogout() {
+    await logout();
+    dispatch(setUser(null));
+  }
+
+  return { handleGetMe, handleLogin, handleRegister, handleLogout };
 }
